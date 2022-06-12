@@ -17,6 +17,7 @@ public class Frame extends JFrame implements ActionListener
     JButton light;
     JButton custom;
     JButton confirm;
+    JButton menu1;
     JTable gameTable;
     JTextField url = new JTextField("");
     JPanel menu = new JPanel(){
@@ -31,7 +32,7 @@ public class Frame extends JFrame implements ActionListener
         public void paint(Graphics g){
             super.paint(g);
             Graphics2D g2D = (Graphics2D) g;
-            g2D.drawImage(img, 0, 0, null);
+            g2D.drawImage(newImage, 0, 0, null);
             super.paintComponents(g);
         }
     };
@@ -39,7 +40,7 @@ public class Frame extends JFrame implements ActionListener
         public void paint(Graphics g){
             super.paint(g);
             Graphics2D g2D = (Graphics2D) g;
-            g2D.drawImage(img, 0, 0, null);
+            g2D.drawImage(newImage, 0, 0, null);
             super.paintComponents(g);
         }
     };
@@ -47,12 +48,13 @@ public class Frame extends JFrame implements ActionListener
         public void paint(Graphics g){
             super.paint(g);
             Graphics2D g2D = (Graphics2D) g;
-            g2D.drawImage(img, 0, 0, null);
+            g2D.drawImage(newImage, 0, 0, null);
             super.paintComponents(g);
         }
     };
     Image img = new ImageIcon("image.jpg").getImage();
     Image menuPicture = new ImageIcon("holmer.png").getImage();
+    Image newImage = img.getScaledInstance(1280, 720, Image.SCALE_DEFAULT);
 
     public Frame()
     {
@@ -104,19 +106,28 @@ public class Frame extends JFrame implements ActionListener
         custom.setText("custom background");
         custom.addActionListener(this);
         custom.setBounds(565, 460, 150, 50);
+
         confirm = new JButton();
         confirm.setText("✓");
         confirm.addActionListener(this);
         confirm.setBounds(745, 520, 25, 25);
         confirm.setVisible(false);
 
-        String[] columnNames = {"title", "author"};
+        menu1 = new JButton();
+        menu1.addActionListener(this);
+        menu1.setBounds(0, 0, 1280, 720);
+        menu1.setOpaque(false);
+        menu1.setContentAreaFilled(false);
+        menu1.setBorderPainted(false);
+        menu1.setVisible(true);
+
+        String[] columnNames = {"play", "title", "author"};
         Object[][] games = {
-                {"tetris", "matthew"},
-                {"naruto", "yuchen"},
-                {"fill", "fill"},
-                {"fill", "fill"},
-                {"fill", "fill"},
+                {"✓", "tetris", "matthew"},
+                {"✓", "naruto", "yuchen"},
+                {"✓", "fill", "fill"},
+                {"✓", "fill", "fill"},
+                {"✓", "fill", "fill"},
         };
         gameTable = new JTable(games, columnNames);
         JScrollPane scrollPane = new JScrollPane(gameTable);
@@ -124,13 +135,14 @@ public class Frame extends JFrame implements ActionListener
         library1.add(scrollPane);
         scrollPane.setViewportView(gameTable);
 
-//        menu.setBounds(0, 0, 1280, 755);
-//        menu.setVisible(true);
-//        menu.setLayout(null);
+        menu.setBounds(0, 0, 1280, 755);
+        menu.setVisible(true);
+        menu.setLayout(null);
+        menu.add(menu1);
 
         mainScreen.setBackground(Color.red);
         mainScreen.setBounds(0, 0, 1280, 755);
-        mainScreen.setVisible(true);
+        mainScreen.setVisible(false);
         mainScreen.setLayout(null);
 
         library1.setBackground(Color.blue);
@@ -153,14 +165,33 @@ public class Frame extends JFrame implements ActionListener
         library1.add(back);
         settings1.add(back1);
 
-//        this.add(menu);
+        this.add(menu);
         this.add(mainScreen);
+        mainScreen.validate(); 
         this.add(library1);
         this.add(settings1);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == menu1)
+        {
+            mainScreen.setVisible(true);
+            menu.setVisible(false);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+            mainScreen.repaint();
+            mainScreen.revalidate();
+            mainScreen.validate();
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException ex) {
+//                throw new RuntimeException(ex);
+//            }
+        }
         if(e.getSource() == light)
         {
             Main.saveImage("https://cdn.discordapp.com/attachments/867594783848661002/985569522431975524/download.jpg?size=4096", "image.jpg");
@@ -172,6 +203,7 @@ public class Frame extends JFrame implements ActionListener
                 throw new RuntimeException(ex);
             }
             mainScreen.repaint();
+            settings1.repaint();
             mainScreen.revalidate();
         }
 //        if(e.getSource() == dark)
@@ -188,6 +220,7 @@ public class Frame extends JFrame implements ActionListener
             img.flush();
             img = new ImageIcon("image.jpg").getImage();
             mainScreen.repaint();
+            settings1.repaint();
         }
         if(e.getSource() == library)
         {
