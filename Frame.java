@@ -12,6 +12,7 @@ public class Frame extends JFrame implements ActionListener
     JButton settings;
     JButton quit;
     JButton back;
+    JButton back1;
     JButton dark;
     JButton light;
     JButton custom;
@@ -84,6 +85,11 @@ public class Frame extends JFrame implements ActionListener
         back.addActionListener(this);
         back.setBounds(10, 10, 75, 25);
 
+        back1 = new JButton();
+        back1.setText("back");
+        back1.addActionListener(this);
+        back1.setBounds(10, 10, 75, 25);
+
         dark = new JButton();
         dark.setText("dark mode");
         dark.addActionListener(this);
@@ -128,13 +134,11 @@ public class Frame extends JFrame implements ActionListener
         mainScreen.setLayout(null);
 
         library1.setBackground(Color.blue);
-        library1.add(back);
         library1.setBounds(0, 0, 1280, 755);
         library1.setVisible(false);
         library1.setLayout(null);
 
         settings1.setBackground(Color.black);
-        settings1.add(back);
         settings1.add(dark);
         settings1.add(light);
         settings1.add(custom);
@@ -146,6 +150,8 @@ public class Frame extends JFrame implements ActionListener
 
         url.setBounds(490, 520, 250, 25);
         url.setVisible(false);
+        library1.add(back);
+        settings1.add(back1);
 
 //        this.add(menu);
         this.add(mainScreen);
@@ -155,13 +161,19 @@ public class Frame extends JFrame implements ActionListener
 
     @Override
     public void actionPerformed(ActionEvent e) {
-//        if(e.getSource() == light)
-//        {
-//            Main.saveImage("https://www.patternpictures.com/wp-content/uploads/Kristal-subtle-glass-white-background-pattern-patternpictures-0220.png", "image.jpg");
-//            img.flush();
-//            img = new ImageIcon("image.jpg").getImage();
-//            mainScreen.repaint();
-//        }
+        if(e.getSource() == light)
+        {
+            Main.saveImage("https://cdn.discordapp.com/attachments/867594783848661002/985569522431975524/download.jpg?size=4096", "image.jpg");
+            img.flush();
+            img = new ImageIcon("image.jpg").getImage();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+            mainScreen.repaint();
+            mainScreen.revalidate();
+        }
 //        if(e.getSource() == dark)
 //        {
 //            Main.saveImage("https://media.istockphoto.com/vectors/abstract-black-background-geometric-texture-vector-id936834172?k=20&m=936834172&s=612x612&w=0&h=rpSBvPplOiceRBGmKhoo8hiQlfXQxUz50qXuFrbDOGw=", "image.jpg");
@@ -181,7 +193,7 @@ public class Frame extends JFrame implements ActionListener
         {
             library1.setVisible(true);
             mainScreen.setVisible(false);
-            back.setVisible(true);
+            back1.setVisible(true);
         }
         if(e.getSource() == settings)
         {
@@ -214,6 +226,15 @@ public class Frame extends JFrame implements ActionListener
             library1.setVisible(false);
             settings1.setVisible(false);
             back.setVisible(false);
+            url.setVisible(false);
+            confirm.setVisible(false);
+        }
+        if(e.getSource() == back1)
+        {
+            mainScreen.setVisible(true);
+            library1.setVisible(false);
+            settings1.setVisible(false);
+            back1.setVisible(false);
             url.setVisible(false);
             confirm.setVisible(false);
         }
